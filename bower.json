@@ -1,0 +1,17 @@
+{
+  "name": "angular-feature-toggle",
+  "version": "0.0.0",
+  "homepage": "https://bitbucket.org/mrjoelkaufman/angular-feature-toggle",
+  "main": "dist/angular-feature-toggle.min.js",
+  "authors": [
+    "joel kaufman"
+  ],
+  "license": "private",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
