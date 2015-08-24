@@ -27,7 +27,7 @@
       var oldStateFn = $stateProvider.state;
       $stateProvider.state = function(name, conf) {
         // enable state if feature version is satisfied or undefined
-        if (conf.feature === 'undefined' || featureToggleProvider.isEnabled(conf.feature)) {
+        if (! conf.feature || featureToggleProvider.isEnabled(conf.feature)) {
           try {
             return oldStateFn.call($stateProvider, name, conf);
           }
