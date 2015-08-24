@@ -9,12 +9,12 @@
 
 
   function initFeatures(featureToggleProvider) {
-    if (window.angularFeaturesConf) {
-      featureToggleProvider.init(window.angularFeaturesConf);
-    }
-    else {
+    if(! window.angularFeaturesConf){
       window.console.warn('could not detect features');
+      return false;
     }
+
+    featureToggleProvider.init(window.angularFeaturesConf);
   }
 
 ///////////////
@@ -27,7 +27,7 @@
       var oldStateFn = $stateProvider.state;
       $stateProvider.state = function(name, conf) {
         // enable state if feature version is satisfied or undefined
-        if (featureToggleProvider.isVersion(conf.feature)) {
+        if (featureToggleProvider.isEnabled(conf.feature)) {
           try {
             return oldStateFn.call($stateProvider, name, conf);
           }
@@ -49,18 +49,7 @@
 
 // factory
   function featureToggle() {
-    // define Feature model
-    function Feature(version) {
-      this.version = version;
-    }
 
-
-    Feature.prototype.isEnabled = function() {
-      return semver.satisfies(this.version, '*');
-    };
-
-
-    /////////////////
     var features = [];
 
     var service = {
