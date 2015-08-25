@@ -5,7 +5,8 @@
     .config(overrideUIRouterStateFn)
     .provider('featureToggle', featureToggle)
     .directive('feature', showIfFeature)
-    .directive('hideIfFeature', hideIfFeature);
+    .directive('hideIfFeature', hideIfFeature)
+    .directive('stateRequired', stateRequired);
 
 
   function initFeatures(featureToggleProvider) {
@@ -144,4 +145,42 @@
       }
     }
   }
+
+
+  // show only if there is registered state
+  function stateRequired($state) {
+    var ddo = {
+      restrict: 'AE',
+      transclude: 'element',
+      terminal: true,
+      priority: 999,
+      link: link
+    };
+
+    return ddo;
+
+    function link(scope, element, attrs, ctrl, $transclude) {
+      var el, childScope, stateName = attrs.stateRequired || attrs.uiSref;
+
+      if ($state.get(stateName)) {// there is a registered state
+        childScope = scope.$new();
+        $transclude(childScope, function(clone) {
+          el = clone;
+          element.after(el).remove();
+        });
+      } else {
+        if(childScope) {
+          childScope.$destroy();
+          childScope = null;
+        }
+        if(el) {
+          el.after(element).remove();
+          el = null;
+        }
+      }
+    }
+  }
+
+
+
 })();
